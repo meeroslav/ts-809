@@ -1,0 +1,27 @@
+.label {
+  font-weight: bold;
+  display: block;
+  font-size: 0.7em;
+}
+
+.point {
+  padding: 1.5em .8em;
+  margin-right: .5em;
+  background: #efefef;
+}
+
+.point.selected {
+  background: #b73e44;
+}
+
+.point:nth-child(4n + 2) {
+  background: #dedede;
+}
+
+.point.selected:nth-child(4n + 2) {
+  background: #7f2f34;
+}
+
+.track {
+  margin-bottom: 1em;
+}
