@@ -14,12 +14,16 @@
   background: #b73e44;
 }
 
+.point.marked {
+  box-shadow: 0 0 5px 0px #b73e44;
+}
+
 .point:nth-child(4n + 2) {
   background: #dedede;
 }
 
 .point.selected:nth-child(4n + 2) {
-  background: #7f2f34;
+  background: #a72e34;
 }
 
 .track {

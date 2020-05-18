@@ -2,4 +2,5 @@
 export const label: string;
 export const point: string;
 export const selected: string;
+export const marked: string;
 export const track: string;

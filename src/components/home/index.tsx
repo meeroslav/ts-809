@@ -1,36 +1,56 @@
 import { FunctionalComponent, h } from 'preact';
 import * as style from './style.css';
-import { useEffect, useState } from 'preact/hooks';
+import { PropRef, useEffect, useRef, useState } from 'preact/hooks';
 import Track from '../track';
 
-const Home: FunctionalComponent = () => {
-  const [time, setTime] = useState<number>(Date.now());
-  const [bpm, setBpm] = useState<number>(125);
+const BPM_MINUTE = 60000 / 4;
+const DEFAULT_BPM = 125;
 
-  // gets called when this route is navigated to
+function useInterval(callback: () => void, delay: number) {
+  const savedCallback: PropRef<any> = useRef();
+
+  // Remember the latest callback.
   useEffect(() => {
-    const timer = window.setInterval(() => setTime(Date.now()), 1000);
+    savedCallback.current = callback;
+  }, [callback]);
 
-    // gets called just before navigating away from the route
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  // Set up the interval.
+  useEffect(() => {
+    function tick(): void {
+      savedCallback.current();
+    }
+
+    const id = setInterval(tick, delay);
+    return () => clearInterval(id);
+  }, [delay]);
+}
+
+const Home: FunctionalComponent = () => {
+  const [position, setPosition] = useState<number>(0);
+  const [bpm, setBpm] = useState<number>(DEFAULT_BPM);
+  const [delay, setDelay] = useState<number>(BPM_MINUTE / DEFAULT_BPM);
+
+  useInterval(() => {
+    setPosition((position + 1) % 16);
+  }, delay);
 
   // update the current time
   const increment = () => {
     setBpm(bpm + 1);
+    setDelay(BPM_MINUTE / bpm);
   };
 
   const decrement = () => {
-    setBpm(bpm + 1);
+    setBpm(bpm - 1);
+    setDelay(BPM_MINUTE / bpm);
   };
 
   return (
     <div class={style.home}>
-      <h1>Home</h1>
+      <h1>TransistorScript 809</h1>
 
-      <div>Current time: {new Date(time).toLocaleString()}</div>
+      <div>Current position: {position}</div>
+      <div>Current delay: {delay}</div>
 
       <p>
         <button onClick={decrement}>-</button>
@@ -39,11 +59,11 @@ const Home: FunctionalComponent = () => {
       </p>
 
       <p>
-        <Track url={'some string'} />
-        <Track url={'some string'} />
-        <Track url={'some string'} />
-        <Track url={'some string'} />
-        <Track url={'some string'} />
+        <Track url={'some string'} position={position} />
+        <Track url={'some string'} position={position} />
+        <Track url={'some string'} position={position} />
+        <Track url={'some string'} position={position} />
+        <Track url={'some string'} position={position} />
       </p>
     </div>
   );

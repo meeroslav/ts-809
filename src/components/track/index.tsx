@@ -4,12 +4,15 @@ import * as style from './style.css';
 
 interface Props {
   url: string;
+  position: number;
 }
 
-const Track: FunctionalComponent<Props> = ({ url }: Props) => {
+const pointsPlaceholder = Array(16).fill(false);
+
+const Track: FunctionalComponent<Props> = ({ url, position }: Props) => {
   const [points, setPoints] = useState<[string, boolean[]]>([
     url,
-    Array(16).fill(false) as boolean[],
+    pointsPlaceholder,
   ]);
 
   const togglePoint = (index: number) => () => {
@@ -29,7 +32,9 @@ const Track: FunctionalComponent<Props> = ({ url }: Props) => {
       {points[1].map((point, index) => (
         <button
           key={index}
-          class={`${style.point} ${point ? style.selected : ''}`}
+          class={`${style.point} ${point ? style.selected : ''} ${
+            (index === position) ? style.marked : ''
+          }`}
           onClick={togglePoint(index)}
         />
       ))}
