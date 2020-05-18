@@ -45,6 +45,11 @@ const Home: FunctionalComponent = () => {
     setDelay(BPM_MINUTE / bpm);
   };
 
+  const playSound = (sound: string) => () => {
+    // do something with sound
+    console.log('PLAY', sound);
+  };
+
   return (
     <div class={style.home}>
       <h1>TransistorScript 809</h1>
@@ -59,11 +64,31 @@ const Home: FunctionalComponent = () => {
       </p>
 
       <p>
-        <Track url={'some string'} position={position} />
-        <Track url={'some string'} position={position} />
-        <Track url={'some string'} position={position} />
-        <Track url={'some string'} position={position} />
-        <Track url={'some string'} position={position} />
+        <Track
+          url={'some string'}
+          position={position}
+          play={playSound('1bc')}
+        />
+        <Track
+          url={'some string'}
+          position={position}
+          play={playSound('2bc')}
+        />
+        <Track
+          url={'some string'}
+          position={position}
+          play={playSound('3bc')}
+        />
+        <Track
+          url={'some string'}
+          position={position}
+          play={playSound('4bc')}
+        />
+        <Track
+          url={'some string'}
+          position={position}
+          play={playSound('5bc')}
+        />
       </p>
     </div>
   );

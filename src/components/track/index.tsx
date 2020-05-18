@@ -5,11 +5,12 @@ import * as style from './style.css';
 interface Props {
   url: string;
   position: number;
+  play: () => void;
 }
 
 const pointsPlaceholder = Array(16).fill(false);
 
-const Track: FunctionalComponent<Props> = ({ url, position }: Props) => {
+const Track: FunctionalComponent<Props> = ({ url, position, play }: Props) => {
   const [points, setPoints] = useState<[string, boolean[]]>([
     url,
     pointsPlaceholder,
@@ -26,6 +27,10 @@ const Track: FunctionalComponent<Props> = ({ url, position }: Props) => {
     ]);
   };
 
+  if (points[1][position]) {
+    play();
+  }
+
   return (
     <div class={style.track}>
       <label class={style.label}>{url}</label>
@@ -33,7 +38,7 @@ const Track: FunctionalComponent<Props> = ({ url, position }: Props) => {
         <button
           key={index}
           class={`${style.point} ${point ? style.selected : ''} ${
-            (index === position) ? style.marked : ''
+            index === position ? style.marked : ''
           }`}
           onClick={togglePoint(index)}
         />
