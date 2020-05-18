@@ -6,7 +6,7 @@ import Track from '../track';
 const BPM_MINUTE = 60000 / 4;
 const DEFAULT_BPM = 125;
 
-function useInterval(callback: () => void, delay: number) {
+const useInterval = (callback: () => void, delay: number) => {
   const savedCallback: PropRef<any> = useRef();
 
   // Remember the latest callback.
@@ -23,7 +23,7 @@ function useInterval(callback: () => void, delay: number) {
     const id = setInterval(tick, delay);
     return () => clearInterval(id);
   }, [delay]);
-}
+};
 
 const Home: FunctionalComponent = () => {
   const [position, setPosition] = useState<number>(0);
