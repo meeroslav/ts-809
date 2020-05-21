@@ -1,6 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import * as style from './style.css';
+import { memo } from 'preact/compat';
 
 interface Props {
   url: string;
@@ -11,7 +12,6 @@ interface Props {
 const pointsPlaceholder = Array(16).fill(false);
 
 const Track: FunctionalComponent<Props> = ({ url, position, play }: Props) => {
-  // console.log('Arrived', url, position);
   const [points, setPoints] = useState<[string, boolean[]]>([
     url,
     pointsPlaceholder,
@@ -48,4 +48,8 @@ const Track: FunctionalComponent<Props> = ({ url, position, play }: Props) => {
   );
 };
 
-export default Track;
+const PureTrack = memo(Track, (prevProps, nextProps) => {
+  return prevProps.position === nextProps.position;
+});
+
+export default PureTrack;

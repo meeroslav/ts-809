@@ -44,14 +44,25 @@ const Home: FunctionalComponent = () => {
   const [position, setPosition] = useState<number>(0);
   const [bpm, setBpm] = useState<number>(DEFAULT_BPM);
   const [delay, setDelay] = useState<number>(BPM_MINUTE / DEFAULT_BPM);
-  const [buffers, setBuffers] = useState([]);
+  const [bufferSources, setBufferSources] = useState<AudioBufferSourceNode[]>(
+    []
+  );
   const [started, setStarted] = useState(false);
 
   const context = new AudioContext();
   const bufferLoader = new BufferLoader(
     context,
     samples.map(s => `samples/${s}`),
-    setBuffers
+    (bufferList: AudioBuffer[]) => {
+      setBufferSources(
+        bufferList.map(buffer => {
+          const audio = context.createBufferSource();
+          audio.buffer = buffer;
+          audio.connect(context.destination);
+          return audio;
+        })
+      );
+    }
   );
   bufferLoader.load();
 
@@ -80,20 +91,15 @@ const Home: FunctionalComponent = () => {
 
   const playSound = (src: string, index: number) => () => {
     // do something with sound
-    if (buffers[index]) {
-      const audio = context.createBufferSource();
-      audio.buffer = buffers[index];
-      audio.connect(context.destination);
-      audio.start(0);
+    if (bufferSources[index]) {
+      console.log('Should play', src, position);
+      bufferSources[index].start(0);
     }
   };
 
   return (
     <div class={style.home}>
       <h1>TransistorScript 809</h1>
-
-      <div>Current position: {position}</div>
-      <div>Current delay: {delay}</div>
       <button onClick={toggleStarted}>{started ? 'STOP' : 'START'}</button>
 
       <p>
