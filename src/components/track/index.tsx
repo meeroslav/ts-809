@@ -11,6 +11,7 @@ interface Props {
 const pointsPlaceholder = Array(16).fill(false);
 
 const Track: FunctionalComponent<Props> = ({ url, position, play }: Props) => {
+  // console.log('Arrived', url, position);
   const [points, setPoints] = useState<[string, boolean[]]>([
     url,
     pointsPlaceholder,
